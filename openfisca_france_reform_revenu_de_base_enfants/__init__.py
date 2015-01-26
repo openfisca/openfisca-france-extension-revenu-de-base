@@ -36,7 +36,7 @@ from openfisca_france.model.base import *
 # Build function
 
 def build_reform(tax_benefit_system):
-    RevenuDeBaseEnfantsReform = reforms.new_simple_reform_class(
+    RevenuDeBaseEnfantsReform = reforms.make_reform(
         name = u"Revenu de base enfants",
         reference = tax_benefit_system,
         )
