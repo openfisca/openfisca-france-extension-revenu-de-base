@@ -447,4 +447,4 @@ def build_reform(tax_benefit_system):
     # sys.exit(0)
 
     RevenuDeBaseEnfantsReform.legislation_json = reform_legislation_json
-    return RevenuDeBaseEnfantsReform
+    return RevenuDeBaseEnfantsReform()
