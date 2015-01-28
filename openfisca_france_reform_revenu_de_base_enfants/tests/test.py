@@ -25,7 +25,6 @@
 
 from datetime import date
 
-from openfisca_core import periods
 from openfisca_france.tests.base import tax_benefit_system
 from openfisca_core.tools import assert_near
 
@@ -119,7 +118,7 @@ def test():
         )
     assert_near(
         reform_simulation.calculate('famille'),
-        [0.,  0.,  0.,  0.,  0],
+        [0., 0., 0., 0., 0],
         error_margin = error_margin,
         )
     assert_near(
@@ -129,17 +128,17 @@ def test():
         )
     assert_near(
         reform_simulation.calculate('rdb_enf'),
-        [0.        ,     0.        ,  1995.57678223,  1995.57678223, 2774.33837891],
+        [0., 0., 1995.57678223, 1995.57678223, 2774.33837891],
         error_margin = error_margin,
         )
     assert_near(
         reform_simulation.calculate('csgenf'),
-        [-299.99996948, -1188.52087402,    -0.        ,    -0.        , -0.],
+        [-299.99996948, -1188.52087402, -0., -0., -0.],
         error_margin = error_margin,
         )
     assert_near(
         reform_simulation.calculate('csg'),
-        [-1392.48596191, -5347.15185547,     0.        ,     0.        , 0],
+        [-1392.48596191, -5347.15185547, 0., 0., 0],
         error_margin = error_margin,
         )
     assert_near(
@@ -154,17 +153,17 @@ def test():
         )
     assert_near(
         reform_simulation.calculate('sali'),
-        [12000, 46000,     0,     0,     0],
+        [12000, 46000, 0, 0, 0],
         error_margin = error_margin,
         )
     assert_near(
         reform_simulation.calculate('salsuperbrut'),
-        [16272.94433594,  77621.3125    ,      0.        ,      0.        , 0.],
+        [16272.94433594, 77621.3125, 0., 0., 0.],
         error_margin = error_margin,
         )
     assert_near(
         reform_simulation.calculate('salnet'),
-        [11577.5703125 ,  45932.82421875,      0.        ,      0.        , 0.],
+        [11577.5703125, 45932.82421875, 0., 0., 0.],
         error_margin = error_margin,
         )
     assert_near(
