@@ -57,10 +57,7 @@ def test():
             ],
         ).new_simulation(debug = True)
 
-    print simulation.calculate('revdisp')
-
-    Reform = openfisca_france_reform_revenu_de_base_enfants.build_reform(tax_benefit_system)
-    reform = Reform()
+    reform = openfisca_france_reform_revenu_de_base_enfants.build_reform(tax_benefit_system)
     reform_simulation = reform.new_scenario().init_single_entity(
         period = 2014,
         parent1 = dict(
