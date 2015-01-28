@@ -32,7 +32,33 @@ import openfisca_france_reform_revenu_de_base_enfants
 
 
 def test():
-    year = 2013
+    simulation = tax_benefit_system.new_scenario().init_single_entity(
+        period = 2014,
+        parent1 = dict(
+            birth = date(1980, 1, 1),
+            sali = 12000,
+            statmarit = u'Marié',
+            ),
+        parent2 = dict(
+            birth = date(1980, 1, 1),
+            sali = 46000,
+            statmarit = u'Marié',
+            ),
+        enfants = [
+            dict(
+                birth = date(2010, 1, 1),
+                ),
+            dict(
+                birth = date(2005, 1, 1),
+                ),
+            dict(
+                birth = date(1999, 1, 1),
+                ),
+            ],
+        ).new_simulation(debug = True)
+
+    print simulation.calculate('revdisp')
+
     Reform = openfisca_france_reform_revenu_de_base_enfants.build_reform(tax_benefit_system)
     reform = Reform()
     reform_simulation = reform.new_scenario().init_single_entity(
@@ -58,7 +84,8 @@ def test():
                 birth = date(1999, 1, 1),
                 ),
             ],
-        ).new_simulation()
+        ).new_simulation(debug = True)
+
     reform_simulation_pauvre = reform.new_scenario().init_single_entity(
         period = 2014,
         parent1 = dict(
@@ -82,7 +109,7 @@ def test():
                 birth = date(1999, 1, 1),
                 ),
             ],
-        ).new_simulation()
+        ).new_simulation(debug = True)
 
     error_margin = 0.01
 
