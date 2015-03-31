@@ -44,7 +44,7 @@ doc_lines = __doc__.split('\n')
 
 setup(
     name = 'OpenFisca-France-Reform-Revenu-De-Base-Enfants',
-    version = '0.1dev',
+    version = '0.1.dev0',
 
     author = 'Marc de Basquiat, Adrien Fabre',
     author_email = 'marc@de-basquiat.com',
