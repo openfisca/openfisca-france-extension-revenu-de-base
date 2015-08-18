@@ -25,13 +25,12 @@
 
 from __future__ import division
 
-import copy
 import os
 
 from numpy import logical_not as not_, maximum as max_, round
 from openfisca_core import reforms
 from openfisca_france.model.base import (
-    CHEF, ENFS, Familles, FloatCol, FoyersFiscaux, Individus, Menages, PART, SimpleFormulaColumn, VOUS,
+    CHEF, ENFS, Familles, FloatCol, Individus, PART, SimpleFormulaColumn, VOUS,
     )
 from openfisca_france.model.pfam import nb_enf
 
@@ -41,23 +40,14 @@ from . import decompositions
 # Build function
 
 def build_reform(tax_benefit_system):
-    # Update legislation
-
-    reference_legislation_json = tax_benefit_system.legislation_json
-    reform_legislation_json = copy.deepcopy(reference_legislation_json)
-    reform_legislation_json['children']['cotsoc']['children']['exo_bas_sal']['children']['fillon']['children']['tx_max']['values'][0]['value'] = 0.2075  # noqa
-    reform_legislation_json['children']['cotsoc']['children']['exo_bas_sal']['children']['fillon']['children']['tx_max2']['values'][0]['value'] = 0.2285  # noqa
-    reform_legislation_json['children']['cotsoc']['children']['exo_bas_sal']['children']['fillon']['children']['tx_max2']['values'][1]['value'] = 0.2075  # noqa
-
-    RevenuDeBaseEnfantsReform = reforms.make_reform(
+    Reform = reforms.make_reform(
         decomposition_dir_name = os.path.dirname(os.path.abspath(decompositions.__file__)),
         decomposition_file_name = 'decomposition.xml',
-        legislation_json = reform_legislation_json,
         name = u"Revenu de base enfants",
         reference = tax_benefit_system,
         )
 
-    @RevenuDeBaseEnfantsReform.formula
+    @Reform.formula
     class nbptr(SimpleFormulaColumn):
         reference = tax_benefit_system.column_by_name['nbptr']
 
@@ -169,7 +159,7 @@ def build_reform(tax_benefit_system):
             return period, (marpac | jveuf) * m + (veuf & not_(jveuf)) * v + celdiv * c
 
     # Suppression des allocations familiales
-    @RevenuDeBaseEnfantsReform.formula
+    @Reform.formula
     class af(SimpleFormulaColumn):
         reference = tax_benefit_system.column_by_name['af']
 
@@ -183,7 +173,7 @@ def build_reform(tax_benefit_system):
             return period, af_base * 0
 
     # Suppression du complément familial
-    @RevenuDeBaseEnfantsReform.formula
+    @Reform.formula
     class cf(SimpleFormulaColumn):
         reference = tax_benefit_system.column_by_name['cf']
 
@@ -203,7 +193,7 @@ def build_reform(tax_benefit_system):
             return period, not_(residence_mayotte) * round(cf_brut, 2) * 0
 
     # Suppression de l'allocation de rentrée scolaire
-    @RevenuDeBaseEnfantsReform.formula
+    @Reform.formula
     class ars(SimpleFormulaColumn):
         reference = tax_benefit_system.column_by_name['ars']
 
@@ -221,7 +211,7 @@ def build_reform(tax_benefit_system):
             return period, br_pf * 0
 
     # Suppression du nombre d'enfants dans le calcul du RSA socle
-    @RevenuDeBaseEnfantsReform.formula
+    @Reform.formula
     class rsa_socle(SimpleFormulaColumn):
         reference = tax_benefit_system.column_by_name['rsa_socle']
 
@@ -241,8 +231,7 @@ def build_reform(tax_benefit_system):
             nbp = nb_par
 
             eligib = (
-                (age_parents[CHEF] >= rmi.age_pac)
-                *
+                (age_parents[CHEF] >= rmi.age_pac) *
                 not_(activite_parents[CHEF] == 2)
                 ) | (
                     (age_parents[PART] >= rmi.age_pac) * not_(activite_parents[PART] == 2)
@@ -257,7 +246,7 @@ def build_reform(tax_benefit_system):
             return period, eligib * rmi.rmi * taux
 
     # Suppression du nombre d'enfants dans le calcul du RSA forfait logement
-    @RevenuDeBaseEnfantsReform.formula
+    @Reform.formula
     class rmi_nbp(SimpleFormulaColumn):
         reference = tax_benefit_system.column_by_name['rmi_nbp']
 
@@ -274,7 +263,7 @@ def build_reform(tax_benefit_system):
             return period, nb_par  # + nb_enf(age, smic55, 0, P.age_pac - 1)
 
     # Suppression de la cotisation patronale famille
-    @RevenuDeBaseEnfantsReform.formula
+    @Reform.formula
     class famille(SimpleFormulaColumn):
         reference = tax_benefit_system.column_by_name['famille']
 
@@ -311,7 +300,7 @@ def build_reform(tax_benefit_system):
     #    return taux_fillon
 
     # Création d'un revenu de base enfant - Version famille
-    @RevenuDeBaseEnfantsReform.formula
+    @Reform.formula
     class rdb_enfant_famille(SimpleFormulaColumn):
         column = FloatCol
         entity_class = Familles
@@ -339,7 +328,7 @@ def build_reform(tax_benefit_system):
     # Les taux 0,41 et 0,16 (0,57-0,41) sont issus des allocations familiales
 
     # Création d'un revenu de base enfant - Version individus
-    @RevenuDeBaseEnfantsReform.formula
+    @Reform.formula
     class rdb_enf(SimpleFormulaColumn):
         column = FloatCol
         entity_class = Individus
@@ -354,7 +343,7 @@ def build_reform(tax_benefit_system):
             return period, ((age < 14) * 0.41 + not_(age < 14) * 0.57) * bmaf * (age <= 18)
 
     # Création d'une CSG enfant
-    @RevenuDeBaseEnfantsReform.formula
+    @Reform.formula
     class csgenf(SimpleFormulaColumn):
         column = FloatCol
         entity_class = Individus
@@ -367,7 +356,7 @@ def build_reform(tax_benefit_system):
             montant_csg = revnet * 0.025
             return period, - montant_csg
 
-    @RevenuDeBaseEnfantsReform.formula
+    @Reform.formula
     class csg(SimpleFormulaColumn):
         reference = tax_benefit_system.column_by_name['csg']
 
@@ -395,7 +384,7 @@ def build_reform(tax_benefit_system):
             return period, (csgsali + csgsald + csgchoi + csgchod + csgrsti + csgrstd +
                     csg_fon + csg_cap_lib_declarant1 + csg_pv_mo + csg_pv_immo + csg_cap_bar_declarant1 + csgenfant)
 
-    @RevenuDeBaseEnfantsReform.formula
+    @Reform.formula
     class revdisp(SimpleFormulaColumn):
         reference = tax_benefit_system.column_by_name['revdisp']
 
@@ -424,4 +413,13 @@ def build_reform(tax_benefit_system):
 
             return period, rev_trav + pen + rev_cap + psoc + ppe + impo + rdb_enfant
 
-    return RevenuDeBaseEnfantsReform()
+    reform = Reform()
+    reform.modify_legislation_json(modifier_function = modify_legislation_json)
+    return reform
+
+
+def modify_legislation_json(reference_legislation_json_copy):
+    reference_legislation_json_copy['children']['cotsoc']['children']['exo_bas_sal']['children']['fillon']['children']['tx_max']['values'][0]['value'] = 0.2075  # noqa
+    reference_legislation_json_copy['children']['cotsoc']['children']['exo_bas_sal']['children']['fillon']['children']['tx_max2']['values'][0]['value'] = 0.2285  # noqa
+    reference_legislation_json_copy['children']['cotsoc']['children']['exo_bas_sal']['children']['fillon']['children']['tx_max2']['values'][1]['value'] = 0.2075  # noqa
+    return reference_legislation_json_copy
