@@ -1,1 +1,1 @@
-from .reform import build_reform
+from .reform import build_reform  # noqa
