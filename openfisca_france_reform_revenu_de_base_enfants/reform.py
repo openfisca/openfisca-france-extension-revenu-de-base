@@ -43,6 +43,7 @@ def build_reform(tax_benefit_system):
     Reform = reforms.make_reform(
         decomposition_dir_name = os.path.dirname(os.path.abspath(decompositions.__file__)),
         decomposition_file_name = 'decomposition.xml',
+        key = 'revenu_de_base_enfants',
         name = u"Revenu de base enfants",
         reference = tax_benefit_system,
         )
