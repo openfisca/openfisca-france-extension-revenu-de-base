@@ -56,9 +56,9 @@ setup(
     url = 'https://github.com/openfisca/openfisca-france-reform-revenu-de-base-enfants',
 
     install_requires = [
-        'numpy',
-        'OpenFisca-Core >= 0.5dev',
-        'OpenFisca-France >= 0.5dev',
+        'numpy >= 1.6,< 1.10',
+        'OpenFisca-Core >= 0.5.3.dev0',
+        'OpenFisca-France >= 0.5.4.dev0',
         ],
     packages = find_packages(),
     zip_safe = False,
