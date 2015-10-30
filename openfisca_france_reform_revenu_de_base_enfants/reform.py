@@ -32,7 +32,7 @@ from openfisca_core import reforms
 from openfisca_france.model.base import (
     CHEF, ENFS, Familles, FloatCol, Individus, PART, SimpleFormulaColumn, VOUS,
     )
-from openfisca_france.model.pfam import nb_enf
+from openfisca_france.model.prestations.prestations_familiales.base_ressource import nb_enf
 
 from . import decompositions
 
@@ -186,10 +186,10 @@ def build_reform(tax_benefit_system):
             paje_base_montant = simulation.calculate('paje_base_montant', period)
             apje_temp = simulation.calculate('apje_temp', period)
             ape_temp = simulation.calculate('ape_temp', period)
-            cf_temp = simulation.calculate('cf_temp', period)
+            cf_montant = simulation.calculate('cf_montant', period)
             residence_mayotte = simulation.calculate('residence_mayotte', period)
 
-            cf_brut = (paje_base_temp < cf_temp) * (apje_temp <= cf_temp) * (ape_temp <= cf_temp) * cf_temp
+            cf_brut = (paje_base_montant < cf_montant) * (apje_temp <= cf_montant) * (ape_temp <= cf_montant) * cf_montant
             # return period, not_(residence_mayotte) * round(cf_brut, 2)
             return period, not_(residence_mayotte) * round(cf_brut, 2) * 0
 
