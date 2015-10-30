@@ -108,100 +108,100 @@ def test():
             ],
         ).new_simulation(debug = True)
 
-    error_margin = 0.01
+    absolute_error_margin = 0.01
 
     assert_near(
         reform_simulation.calculate('nbptr'),
         [2],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('af'),
         [0],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('cf'),
         [0],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('ars'),
         [0],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('rsa'),
         [334.37060547],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('rmi_nbp'),
         [24],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('famille'),
         [0., 0., 0., 0., 0],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('rdb_enfant_famille'),
         [6765.49121094],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('rdb_enf'),
         [0., 0., 1995.57678223, 1995.57678223, 2774.33837891],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('csgenf'),
         [-299.99996948, -1188.52087402, -0., -0., -0.],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('csg'),
         [-1392.48596191, -5347.15185547, 0., 0., 0],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('revdisp'),
         [62391.12890625],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation_pauvre.calculate('revdisp'),
         [25799.73828125],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('salaire_imposable'),
         [12000, 46000, 0, 0, 0],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('salsuperbrut'),
         [16272.94433594, 77621.3125, 0., 0., 0.],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('salaire_net'),
         [11577.5703125, 45932.82421875, 0., 0., 0.],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('pfam'),
         [0],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation_pauvre.calculate('pfam'),
         [0],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
     assert_near(
         reform_simulation.calculate('irpp'),
         [-4798.390625],
-        error_margin = error_margin,
+        absolute_error_margin = absolute_error_margin,
         )
