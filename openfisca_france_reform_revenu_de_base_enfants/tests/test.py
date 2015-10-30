@@ -116,22 +116,22 @@ def test():
         absolute_error_margin = absolute_error_margin,
         )
     assert_near(
-        reform_simulation.calculate('af'),
+        reform_simulation.calculate('af', "2015-01"),
         [0],
         absolute_error_margin = absolute_error_margin,
         )
     assert_near(
-        reform_simulation.calculate('cf'),
+        reform_simulation.calculate('cf', "2015-01"),
         [0],
         absolute_error_margin = absolute_error_margin,
         )
     assert_near(
-        reform_simulation.calculate('ars'),
+        reform_simulation.calculate('ars', "2015-01"),
         [0],
         absolute_error_margin = absolute_error_margin,
         )
     assert_near(
-        reform_simulation.calculate('rsa'),
+        reform_simulation.calculate('rsa', "2015-01"),
         [334.37060547],
         absolute_error_margin = absolute_error_margin,
         )
