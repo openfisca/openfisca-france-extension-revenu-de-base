@@ -270,9 +270,9 @@ def build_reform(tax_benefit_system):
 
         def function(self, simulation, period):
             period = period.start.period(u'month').offset('first-of')
-            salbrut = simulation.calculate('salbrut', period)
+            salaire_de_base = simulation.calculate('salaire_de_base', period)
 
-            return period, salbrut * 0
+            return period, salaire_de_base * 0
 
     # Baisse de l'éxonération Fillon
     # TODO /!\ CHANGER LES PARAMÈTRES DE L'ÉXONÉRATION FILLON (-5,25%)
@@ -364,7 +364,7 @@ def build_reform(tax_benefit_system):
         def function(self, simulation, period):
             """Contribution sociale généralisée"""
             period = period.start.offset('first-of', 'month').period('year')
-            csgsali = simulation.calculate('csgsali', period)
+            csg_imposable_salaire = simulation.calculate('csg_imposable_salaire', period)
             csgsald = simulation.calculate('csgsald', period)
             csgchoi = simulation.calculate('csgchoi', period)
             csgchod = simulation.calculate('csgchod', period)
@@ -382,7 +382,7 @@ def build_reform(tax_benefit_system):
             csg_pv_immo = self.cast_from_entity_to_role(csg_pv_immo_holder, role = VOUS)
             csg_pv_mo = self.cast_from_entity_to_role(csg_pv_mo_holder, role = VOUS)
 
-            return period, (csgsali + csgsald + csgchoi + csgchod + csgrsti + csgrstd +
+            return period, (csg_imposable_salaire + csgsald + csgchoi + csgchod + csgrsti + csgrstd +
                     csg_fon + csg_cap_lib_declarant1 + csg_pv_mo + csg_pv_immo + csg_cap_bar_declarant1 + csgenfant)
 
     @Reform.formula
