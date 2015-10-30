@@ -182,8 +182,8 @@ def build_reform(tax_benefit_system):
             '''
             L'allocation de base de la paje n'est pas cumulable avec le complément familial
             '''
-            period = period.start.offset('first-of', 'month').period('year')
-            paje_base_temp = simulation.calculate('paje_base_temp', period)
+            period = period.start.offset('first-of', 'month').period('month')
+            paje_base_montant = simulation.calculate('paje_base_montant', period)
             apje_temp = simulation.calculate('apje_temp', period)
             ape_temp = simulation.calculate('ape_temp', period)
             cf_temp = simulation.calculate('cf_temp', period)
@@ -203,7 +203,7 @@ def build_reform(tax_benefit_system):
             Allocation de rentrée scolaire brute de CRDS
             '''
 
-            period = period.start.offset('first-of', 'month').period('year')
+            period = period.start.offset('first-of', 'month').period('month')
             # age_holder = simulation.compute('age', period)
             # af_nbenf = simulation.calculate('af_nbenf', period)
             # smic55_holder = simulation.compute('smic55', period)
