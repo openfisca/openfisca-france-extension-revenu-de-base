@@ -1,4 +1,4 @@
-# Extension OpenFisca pour le revenu de base enfants
+# Extension OpenFisca pour le revenu de base
 
 [OpenFisca](http://www.openfisca.fr/) is a versatile microsimulation free software.
 
