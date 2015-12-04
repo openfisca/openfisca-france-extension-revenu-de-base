@@ -5,7 +5,7 @@ from datetime import date
 from openfisca_france.tests.base import tax_benefit_system
 from openfisca_core.tools import assert_near
 
-from openfisca_france_reform_revenu_de_base_cotisations import build_reform
+from openfisca_france_extension_revenu_de_base.cotisations import build_reform
 
 
 def test():

@@ -3,7 +3,7 @@
 from __future__ import division
 
 from openfisca_core import reforms
-from openfisca_france.model.base import FloatCol, Individus, SimpleFormulaColumn
+from openfisca_france.model.base import FloatCol, Individus, Variable
 
 
 # Build function
@@ -15,8 +15,7 @@ def build_reform(tax_benefit_system):
         reference = tax_benefit_system,
         )
 
-    @Reform.formula
-    class cotisations_contributives(SimpleFormulaColumn):
+    class cotisations_contributives(Variable):
         column = FloatCol
         entity_class = Individus
         label = u"Nouvelles cotisations contributives"
@@ -86,8 +85,7 @@ def build_reform(tax_benefit_system):
                 )
             return period, cotisations_contributives
 
-    @Reform.formula
-    class nouv_salaire_de_base(SimpleFormulaColumn):
+    class nouv_salaire_de_base(Variable):
         reference = tax_benefit_system.column_by_name['salaire_de_base']
 
         # Le salaire brut se définit dans la réforme comme le salaire super-brut auquel
@@ -104,8 +102,7 @@ def build_reform(tax_benefit_system):
                 )
             return period, nouv_salaire_de_base
 
-    @Reform.formula
-    class nouv_csg(SimpleFormulaColumn):
+    class nouv_csg(Variable):
         reference = tax_benefit_system.column_by_name['csg_imposable_salaire']
 
         # On applique une CSG unique à 22,5% qui finance toutes les prestations non-contributives
@@ -119,8 +116,7 @@ def build_reform(tax_benefit_system):
                 )
             return period, nouv_csg
 
-    @Reform.formula
-    class salaire_net(SimpleFormulaColumn):
+    class salaire_net(Variable):
         reference = tax_benefit_system.column_by_name['salaire_net']
 
         # On retire la nouvelle CSG (pas celle qui finance le RDB) pour trouver le nouveau salaire net
@@ -136,8 +132,7 @@ def build_reform(tax_benefit_system):
                 )
             return period, salaire_net
 
-    @Reform.formula
-    class salaire_imposable(SimpleFormulaColumn):
+    class salaire_imposable(Variable):
         reference = tax_benefit_system.column_by_name['salaire_imposable']
 
         # Nous sommes partis du nouveau salaire net et par rapport au salaire imposable actuel,

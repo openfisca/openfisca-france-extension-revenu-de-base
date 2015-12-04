@@ -7,7 +7,7 @@ import os
 from numpy import logical_not as not_, maximum as max_, round
 from openfisca_core import reforms
 from openfisca_france.model.base import (
-    CHEF, ENFS, Familles, FloatCol, Individus, PART, SimpleFormulaColumn, VOUS,
+    CHEF, ENFS, Familles, FloatCol, Individus, PART, Variable, VOUS,
     )
 from openfisca_france.model.prestations.prestations_familiales.base_ressource import nb_enf
 
@@ -25,8 +25,7 @@ def build_reform(tax_benefit_system):
         reference = tax_benefit_system,
         )
 
-    @Reform.formula
-    class nbptr(SimpleFormulaColumn):
+    class nbptr(Variable):
         reference = tax_benefit_system.column_by_name['nbptr']
 
         # On enlève les enfants du calcul du nbptr (quotient_familial.enf*)
@@ -137,8 +136,7 @@ def build_reform(tax_benefit_system):
             return period, (marpac | jveuf) * m + (veuf & not_(jveuf)) * v + celdiv * c
 
     # Suppression des allocations familiales
-    @Reform.formula
-    class af(SimpleFormulaColumn):
+    class af(Variable):
         reference = tax_benefit_system.column_by_name['af']
 
         def function(self, simulation, period):
@@ -151,8 +149,7 @@ def build_reform(tax_benefit_system):
             return period, af_base * 0
 
     # Suppression du complément familial
-    @Reform.formula
-    class cf(SimpleFormulaColumn):
+    class cf(Variable):
         reference = tax_benefit_system.column_by_name['cf']
 
         def function(self, simulation, period):
@@ -171,8 +168,7 @@ def build_reform(tax_benefit_system):
             return period, not_(residence_mayotte) * round(cf_brut, 2) * 0
 
     # Suppression de l'allocation de rentrée scolaire
-    @Reform.formula
-    class ars(SimpleFormulaColumn):
+    class ars(Variable):
         reference = tax_benefit_system.column_by_name['ars']
 
         def function(self, simulation, period):
@@ -189,8 +185,7 @@ def build_reform(tax_benefit_system):
             return period, br_pf * 0
 
     # Suppression du nombre d'enfants dans le calcul du RSA socle
-    @Reform.formula
-    class rsa_socle(SimpleFormulaColumn):
+    class rsa_socle(Variable):
         reference = tax_benefit_system.column_by_name['rsa_socle']
 
         def function(self, simulation, period):
@@ -224,8 +219,7 @@ def build_reform(tax_benefit_system):
             return period, eligib * rmi.rmi * taux
 
     # Suppression du nombre d'enfants dans le calcul du RSA forfait logement
-    @Reform.formula
-    class rmi_nbp(SimpleFormulaColumn):
+    class rmi_nbp(Variable):
         reference = tax_benefit_system.column_by_name['rmi_nbp']
 
         def function(self, simulation, period):
@@ -241,8 +235,7 @@ def build_reform(tax_benefit_system):
             return period, nb_par  # + nb_enf(age, smic55, 0, P.age_pac - 1)
 
     # Suppression de la cotisation patronale famille
-    @Reform.formula
-    class famille(SimpleFormulaColumn):
+    class famille(Variable):
         reference = tax_benefit_system.column_by_name['famille']
 
         def function(self, simulation, period):
@@ -278,8 +271,7 @@ def build_reform(tax_benefit_system):
     #    return taux_fillon
 
     # Création d'un revenu de base enfant - Version famille
-    @Reform.formula
-    class rdb_enfant_famille(SimpleFormulaColumn):
+    class rdb_enfant_famille(Variable):
         column = FloatCol
         entity_class = Familles
         label = u"Revenu de base enfant"
@@ -306,8 +298,7 @@ def build_reform(tax_benefit_system):
     # Les taux 0,41 et 0,16 (0,57-0,41) sont issus des allocations familiales
 
     # Création d'un revenu de base enfant - Version individus
-    @Reform.formula
-    class rdb_enf(SimpleFormulaColumn):
+    class rdb_enf(Variable):
         column = FloatCol
         entity_class = Individus
         label = u"Revenu de base enfant"
@@ -321,8 +312,7 @@ def build_reform(tax_benefit_system):
             return period, ((age < 14) * 0.41 + not_(age < 14) * 0.57) * bmaf * (age <= 18)
 
     # Création d'une CSG enfant
-    @Reform.formula
-    class csgenf(SimpleFormulaColumn):
+    class csgenf(Variable):
         column = FloatCol
         entity_class = Individus
         label = u"CSG enfant"
@@ -334,8 +324,7 @@ def build_reform(tax_benefit_system):
             montant_csg = revnet * 0.025
             return period, - montant_csg
 
-    @Reform.formula
-    class csg(SimpleFormulaColumn):
+    class csg(Variable):
         reference = tax_benefit_system.column_by_name['csg']
 
         def function(self, simulation, period):
@@ -362,8 +351,7 @@ def build_reform(tax_benefit_system):
             return period, (csg_imposable_salaire + csgsald + csgchoi + csgchod + csgrsti + csgrstd +
                     csg_fon + csg_cap_lib_declarant1 + csg_pv_mo + csg_pv_immo + csg_cap_bar_declarant1 + csgenfant)
 
-    @Reform.formula
-    class revdisp(SimpleFormulaColumn):
+    class revdisp(Variable):
         reference = tax_benefit_system.column_by_name['revdisp']
 
         def function(self, simulation, period):
